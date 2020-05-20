@@ -282,6 +282,29 @@ namespace leantime\domain\repositories {
 
         }
 
+        /**
+         * clientExists - checks if client exists in the database.
+         *
+         * @access public
+         * @param $id
+         * @return boolean
+         */
+        public function clientExists( $id ) {
+
+            $query = "SELECT name FROM zp_clients WHERE id=:id";
+
+            $stmn = $this->db->database->prepare( $query );
+            $stmn->bindValue( ':id', $id, PDO::PARAM_STR );
+            $stmn->execute();
+
+            $rows = $stmn->fetchAll();
+
+            if ( $rows[0] ) {
+                return true;
+            }
+
+            return false;
+        }
     }
 
 }

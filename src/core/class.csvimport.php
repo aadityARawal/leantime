@@ -26,15 +26,22 @@ class csvImport
     }
 
     public function importCSVData( $file ) {
+
         if ( ! ( $csvFile = fopen( $file , 'r') ) ) {
             return 201;
         }
+
         $i = 1;
+
         while( ( $data = fgetcsv( $csvFile, 1000, ',' ) ) !== false ) {
+
             if ($i === 1) {
                 $i++;
                 continue;
             }
+
+            $id = $data[0];
+
             $values = array(
                 'name' => $data[1],
                 'street' => $data[2],
@@ -46,9 +53,17 @@ class csvImport
                 'internet' => $data[8],
                 'email' => $data[9],
             );
-            $this->clientRepository->addClient($values);
+
+            if ( $this->clientRepository->clientExists( $id ) ) {
+                $this->clientRepository->editClient($values, $id);
+            } else {
+                $this->clientRepository->addClient($values);
+            }
+
         }
+
         return 200;
+
     }
 
 }

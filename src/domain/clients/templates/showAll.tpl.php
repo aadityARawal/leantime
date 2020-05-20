@@ -32,7 +32,7 @@
                 if ( move_uploaded_file( $_FILES['csv_file']['tmp_name'], $filePath ) ) {
                     $CSVImport = new \leantime\core\csvImport($filePath);
                     if ($CSVImport == 200) {
-                        echo "File is imported! ";
+                        echo "<script>alert('File has been imported successfully!');</script>";
                     } else if ($CSVImport == 201) {
                         echo '<script>alert("Couldn\'t open file! ");</script>';
                     }
@@ -44,7 +44,7 @@
             }
             ?>
 
-            git <table class="table table-bordered" cellpadding="0" cellspacing="0" border="0" id="allClientsTable">
+            <table class="table table-bordered" cellpadding="0" cellspacing="0" border="0" id="allClientsTable">
             <colgroup>
                 <col class='con0' />
                 <col class='con1' />
