@@ -20,7 +20,31 @@
             echo $this->displayLink('clients.newClient', "<i class='iconfa-plus'></i> ".$this->__('link.new_client'), null, array('class' => 'btn btn-primary btn-rounded')); ?>
             <?php } ?>
 
-            <table class="table table-bordered" cellpadding="0" cellspacing="0" border="0" id="allClientsTable">
+            <button class="btn btn-primary btn-rounded" onclick="document.getElementById('import-csv').click()"><i class='iconfa-plus'></i>&nbsp;Import CSV</button>
+            <form enctype="multipart/form-data" id="import-csv-form" name="csvform" method="post" action="<?php $_SERVER['PHP_SELF']; ?>">
+                <input name="csv_file" type="file" id="import-csv"style="display:none;" onchange="document.getElementById('import-csv-form').submit()">
+                <input type="submit" style="display:none;"; />
+            </form>
+
+            <?php
+            if (isset($_FILES)) {
+                $filePath = $_SERVER['DOCUMENT_ROOT'] .'/userfiles/'. rand() .'.csv';
+                if ( move_uploaded_file( $_FILES['csv_file']['tmp_name'], $filePath ) ) {
+                    $CSVImport = new \leantime\core\csvImport($filePath);
+                    if ($CSVImport == 200) {
+                        echo "File is imported! ";
+                    } else if ($CSVImport == 201) {
+                        echo '<script>alert("Couldn\'t open file! ");</script>';
+                    }
+                    unset($_FILES);
+                    unset($_POST);
+                    echo "<script>document.getElementById('import-csv-form').reset();window.location = '/clients/showAll';</script>";
+
+                }
+            }
+            ?>
+
+            git <table class="table table-bordered" cellpadding="0" cellspacing="0" border="0" id="allClientsTable">
             <colgroup>
                 <col class='con0' />
                 <col class='con1' />
